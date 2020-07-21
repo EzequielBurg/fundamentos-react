@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-one-expression-per-line */
 import React, { useState, useEffect } from 'react';
 
 import income from '../../assets/income.svg';
@@ -8,7 +9,9 @@ import api from '../../services/api';
 
 import Header from '../../components/Header';
 
-import { formatCurrency, formatDate } from '../../utils/formatValue';
+import formatValue from '../../utils/formatValue';
+
+import formatDate from '../../utils/formatDate';
 
 import { Container, CardContainer, Card, TableContainer } from './styles';
 
@@ -54,9 +57,7 @@ const Dashboard: React.FC = () => {
               <p>Entradas</p>
               <img src={income} alt="Income" />
             </header>
-            <h1 data-testid="balance-income">
-              {formatCurrency(+balance.income)}
-            </h1>
+            <h1 data-testid="balance-income">{formatValue(+balance.income)}</h1>
           </Card>
           <Card>
             <header>
@@ -64,7 +65,7 @@ const Dashboard: React.FC = () => {
               <img src={outcome} alt="Outcome" />
             </header>
             <h1 data-testid="balance-outcome">
-              {formatCurrency(+balance.outcome)}
+              {formatValue(+balance.outcome)}
             </h1>
           </Card>
           <Card total>
@@ -72,9 +73,7 @@ const Dashboard: React.FC = () => {
               <p>Total</p>
               <img src={total} alt="Total" />
             </header>
-            <h1 data-testid="balance-total">
-              {formatCurrency(+balance.total)}
-            </h1>
+            <h1 data-testid="balance-total">{formatValue(+balance.total)}</h1>
           </Card>
         </CardContainer>
 
@@ -93,9 +92,11 @@ const Dashboard: React.FC = () => {
               {transactions.map(item => (
                 <tr key={item.id}>
                   <td className="title">{item.title}</td>
-                  <td className={item.type === 'income' ? 'income' : 'outcome'}>
-                    {formatCurrency(item.value, item.type)}
-                  </td>
+                  {item.type === 'income' ? (
+                    <td className="income">{formatValue(item.value)}</td>
+                  ) : (
+                    <td className="outcome">{`- ${formatValue(item.value)}`}</td>
+                  )}
                   <td>{item.category.title}</td>
                   <td>{formatDate(item.created_at)}</td>
                 </tr>
